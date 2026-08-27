@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "LocalShot",
+  "version": "0.1.0",
+  "description": "完全ローカルで動作するスクリーンショット撮影・注釈Chrome拡張",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "downloads",
+    "clipboardWrite"
+  ],
+  "background": {
+    "service_worker": "src/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "LocalShot",
+    "default_popup": "src/popup.html"
+  },
+  "commands": {
+    "capture-visible": {
+      "suggested_key": { "default": "Alt+Shift+V" },
+      "description": "表示部分を撮影"
+    },
+    "capture-full-page": {
+      "suggested_key": { "default": "Alt+Shift+F" },
+      "description": "フルページを撮影"
+    },
+    "capture-region": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "選択範囲を撮影"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'; img-src 'self' data: blob:; style-src 'self'"
+  }
+}

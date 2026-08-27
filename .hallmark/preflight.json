@@ -1,0 +1,9 @@
+{
+  "scanned_at": "2026-08-27",
+  "framework": "vanilla-html-css-js",
+  "font_stack": "local system sans with monospace accents",
+  "palette": "existing blue accent on cool neutral surfaces",
+  "motion": "motion-cut; no animation library",
+  "spacing": "new 4-point token scale",
+  "preserve": ["offline-only runtime", "existing editor behavior", "DOM control IDs"]
+}

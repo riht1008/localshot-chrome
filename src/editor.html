@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>LocalShot Editor</title>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-mark" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="icon-select" viewBox="0 0 24 24"><path d="m5 3 13 8-6 2-3 6Z"/><path d="m12 13 4 6"/></symbol>
+    <symbol id="icon-rect" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1"/></symbol>
+    <symbol id="icon-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="6"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 19 19 5M11 5h8v8"/></symbol>
+    <symbol id="icon-arrow-open" viewBox="0 0 24 24"><path d="M4 20 19 5M11 5h8v8"/></symbol>
+    <symbol id="icon-arrow-solid" viewBox="0 0 24 24"><path class="icon-fill" d="m3.7 17.9 10.8-10.8-2.8-2.8L21 3l-1.3 9.3-2.8-2.8L6.1 20.3Z"/></symbol>
+    <symbol id="icon-arrow-curved" viewBox="0 0 24 24"><path d="M4 20c0-8 5-13 14-13"/><path d="m13 3 5 4-5 4"/></symbol>
+    <symbol id="icon-arrow-double" viewBox="0 0 24 24"><path d="M5 19 19 5M11 5h8v8M5 11v8h8"/></symbol>
+    <symbol id="icon-line" viewBox="0 0 24 24"><path d="M5 19 19 5"/></symbol>
+    <symbol id="icon-pen" viewBox="0 0 24 24"><path d="m4 20 4.2-1 10.9-10.9a2.1 2.1 0 0 0-3-3L5.2 16Z"/><path d="m14.8 6.4 2.8 2.8"/></symbol>
+    <symbol id="icon-text" viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M8 20h8"/></symbol>
+    <symbol id="icon-highlight" viewBox="0 0 24 24"><path d="m7 15 8-8 3 3-8 8H7Z"/><path d="M5 20h14M13.5 8.5l3 3"/></symbol>
+    <symbol id="icon-blur" viewBox="0 0 24 24"><circle cx="9" cy="9" r="4"/><circle cx="15" cy="9" r="4"/><circle cx="12" cy="15" r="4"/></symbol>
+    <symbol id="icon-mosaic" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></symbol>
+    <symbol id="icon-crop" viewBox="0 0 24 24"><path d="M7 3v14h14M3 7h14v14"/></symbol>
+    <symbol id="icon-undo" viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 0 1 6 6"/></symbol>
+    <symbol id="icon-redo" viewBox="0 0 24 24"><path d="m15 7 5 5-5 5"/><path d="M19 12h-8a6 6 0 0 0-6 6"/></symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 20h14"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#stage">キャンバスへ移動</a>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap" aria-label="LocalShot Editor">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#icon-mark"></use></svg></span>
+        <span class="brand-name">LocalShot</span>
+        <span class="brand-mode">EDITOR</span>
+      </div>
+      <div class="document-context">
+        <span class="document-label">編集中</span>
+        <span id="captureTitle" class="document-title">スクリーンショット</span>
+      </div>
+      <div class="top-actions">
+        <div class="history-actions" role="group" aria-label="編集履歴">
+          <button id="undo" class="icon-button" type="button" title="元に戻す (Ctrl/⌘+Z)" aria-label="元に戻す" disabled><svg class="icon" aria-hidden="true"><use href="#icon-undo"></use></svg></button>
+          <button id="redo" class="icon-button" type="button" title="やり直す (Ctrl/⌘+Shift+Z)" aria-label="やり直す" disabled><svg class="icon" aria-hidden="true"><use href="#icon-redo"></use></svg></button>
+        </div>
+        <button id="copy" class="action-button" type="button" aria-label="画像をコピー"><svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg><span class="button-label">コピー</span></button>
+        <button id="save" class="action-button primary" type="button" aria-label="PNGを保存"><svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg><span class="button-label">PNG保存</span></button>
+      </div>
+    </header>
+
+    <nav class="tool-rail" aria-label="編集ツール">
+      <div class="toolbar" id="tools" role="toolbar" aria-orientation="vertical">
+        <button class="tool-button" type="button" data-tool="select" title="選択 (V)" aria-label="選択ツール、ショートカット V" aria-keyshortcuts="V" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-select"></use></svg><span>選択</span><kbd>V</kbd></button>
+        <button class="tool-button" type="button" data-tool="rect" title="矩形 (R)" aria-label="矩形ツール、ショートカット R" aria-keyshortcuts="R" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-rect"></use></svg><span>矩形</span><kbd>R</kbd></button>
+        <button class="tool-button" type="button" data-tool="ellipse" title="楕円 (O)" aria-label="楕円ツール、ショートカット O" aria-keyshortcuts="O" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-ellipse"></use></svg><span>楕円</span><kbd>O</kbd></button>
+        <button class="tool-button" type="button" data-tool="arrow" title="矢印 (A)" aria-label="矢印ツール、ショートカット A" aria-keyshortcuts="A" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span>矢印</span><kbd>A</kbd></button>
+        <button class="tool-button" type="button" data-tool="line" title="線 (L)" aria-label="線ツール、ショートカット L" aria-keyshortcuts="L" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-line"></use></svg><span>線</span><kbd>L</kbd></button>
+        <button class="tool-button" type="button" data-tool="pen" title="ペン (P)" aria-label="ペンツール、ショートカット P" aria-keyshortcuts="P" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-pen"></use></svg><span>ペン</span><kbd>P</kbd></button>
+        <button class="tool-button" type="button" data-tool="text" title="テキスト (T)" aria-label="テキストツール、ショートカット T" aria-keyshortcuts="T" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-text"></use></svg><span>文字</span><kbd>T</kbd></button>
+        <span class="tool-divider" aria-hidden="true"></span>
+        <button class="tool-button" type="button" data-tool="highlight" title="ハイライト (H)" aria-label="ハイライトツール、ショートカット H" aria-keyshortcuts="H" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-highlight"></use></svg><span>強調</span><kbd>H</kbd></button>
+        <button class="tool-button" type="button" data-tool="blur" title="ぼかし (B)" aria-label="ぼかしツール、ショートカット B" aria-keyshortcuts="B" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-blur"></use></svg><span>ぼかし</span><kbd>B</kbd></button>
+        <button class="tool-button" type="button" data-tool="mosaic" title="モザイク (M)" aria-label="モザイクツール、ショートカット M" aria-keyshortcuts="M" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-mosaic"></use></svg><span>モザイク</span><kbd>M</kbd></button>
+        <button class="tool-button" type="button" data-tool="crop" title="クロップ (C)" aria-label="クロップツール、ショートカット C" aria-keyshortcuts="C" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-crop"></use></svg><span>切抜き</span><kbd>C</kbd></button>
+      </div>
+    </nav>
+
+    <aside class="inspector" aria-label="ツール設定">
+      <header class="inspector-header">
+        <h1 id="inspectorTitle">選択</h1>
+        <p id="inspectorHint">注釈を選択して移動・サイズ変更します。</p>
+      </header>
+
+      <section id="styleSection" class="inspector-section" hidden>
+        <h2>スタイル</h2>
+        <div class="field" data-control="arrow-style">
+          <span class="field-label">矢印の形</span>
+          <div id="arrowStyles" class="arrow-style-grid" role="group" aria-label="矢印の形">
+            <button class="arrow-style-button" type="button" data-arrow-style="open" aria-label="線の矢印" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-open"></use></svg><span>標準</span></button>
+            <button class="arrow-style-button" type="button" data-arrow-style="solid" aria-label="太い塗り矢印" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-solid"></use></svg><span>太矢印</span></button>
+            <button class="arrow-style-button" type="button" data-arrow-style="curved" aria-label="曲線の矢印" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-curved"></use></svg><span>カーブ</span></button>
+            <button class="arrow-style-button" type="button" data-arrow-style="double" aria-label="両端の矢印" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-double"></use></svg><span>両端</span></button>
+          </div>
+        </div>
+        <div class="field" data-control="color">
+          <span class="field-label">色</span>
+          <div id="colorPalette" class="color-palette" role="group" aria-label="標準カラーパレット">
+            <button class="color-swatch swatch-ink" type="button" data-color="#111827" aria-label="黒" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-white is-light" type="button" data-color="#ffffff" aria-label="白" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-gray" type="button" data-color="#64748b" aria-label="グレー" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-red" type="button" data-color="#ef4444" aria-label="赤" aria-pressed="true"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-orange" type="button" data-color="#f97316" aria-label="オレンジ" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-yellow is-light" type="button" data-color="#facc15" aria-label="黄" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-green" type="button" data-color="#22c55e" aria-label="緑" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-teal" type="button" data-color="#14b8a6" aria-label="ティール" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-cyan" type="button" data-color="#06b6d4" aria-label="シアン" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-blue" type="button" data-color="#2563eb" aria-label="青" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-purple" type="button" data-color="#8b5cf6" aria-label="紫" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+            <button class="color-swatch swatch-pink" type="button" data-color="#ec4899" aria-label="ピンク" aria-pressed="false"><span aria-hidden="true">✓</span></button>
+          </div>
+          <label class="color-custom" for="color"><span>カスタム</span><span class="color-control"><input id="color" type="color" value="#ef4444" aria-label="カスタム色"><output id="colorOut" for="color">#EF4444</output></span></label>
+        </div>
+        <div class="field" data-control="stroke">
+          <span class="field-label">線幅</span>
+          <div class="stroke-readout"><span id="strokePreview" class="stroke-preview" aria-hidden="true"></span><output id="strokeOut" for="stroke">8 px</output></div>
+          <span class="range-control"><input id="stroke" type="range" min="1" max="24" value="8" aria-label="線幅、1から24ピクセル"></span>
+          <div id="strokePresets" class="stroke-presets" role="group" aria-label="線幅プリセット">
+            <button type="button" data-stroke="2" aria-pressed="false">2</button>
+            <button type="button" data-stroke="4" aria-pressed="false">4</button>
+            <button type="button" data-stroke="8" aria-pressed="true">8</button>
+            <button type="button" data-stroke="12" aria-pressed="false">12</button>
+          </div>
+        </div>
+        <label class="field" data-control="font">
+          <span class="field-label">文字サイズ</span>
+          <span class="number-control"><input id="fontSize" type="number" inputmode="numeric" min="10" max="160" value="32"><span>px</span></span>
+        </label>
+        <label class="toggle-row" data-control="fill"><span>図形を薄く塗る</span><input id="fill" type="checkbox"></label>
+        <label class="toggle-row" data-control="text-bg"><span>テキスト背景</span><input id="textBg" type="checkbox"></label>
+      </section>
+
+      <section id="cropActions" class="crop-actions" hidden>
+        <div><h2>範囲を確定</h2><p>選択範囲だけを残します。</p></div>
+        <div class="button-row"><button id="cancelCrop" type="button">取消</button><button id="applyCrop" class="primary" type="button">適用</button></div>
+      </section>
+
+      <section class="inspector-section object-actions">
+        <h2>注釈</h2>
+        <p>選択ツールで注釈を動かし、右下のハンドルでサイズを変えられます。</p>
+        <button id="deleteSelected" class="wide-button" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg><span>選択した注釈を削除</span></button>
+        <button id="clearAll" class="wide-button danger-ghost" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg><span>すべての注釈を削除</span></button>
+      </section>
+
+      <details class="shortcut-panel">
+        <summary>キーボード操作</summary>
+        <dl>
+          <div><dt>ツール切替</dt><dd><kbd>V–C</kbd></dd></div>
+          <div><dt>元に戻す</dt><dd><kbd>⌘ Z</kbd></dd></div>
+          <div><dt>保存</dt><dd><kbd>⌘ S</kbd></dd></div>
+          <div><dt>選択解除</dt><dd><kbd>Esc</kbd></dd></div>
+        </dl>
+      </details>
+    </aside>
+
+    <main class="stage" id="stage" tabindex="-1" aria-label="編集キャンバス">
+      <div id="canvasWrap" class="canvas-wrap">
+        <canvas id="canvas" role="img" aria-label="編集中のスクリーンショットと注釈"></canvas>
+      </div>
+      <div id="empty" class="empty" hidden role="status">
+        <svg class="empty-icon" aria-hidden="true"><use href="#icon-mark"></use></svg>
+        <strong>撮影データがありません</strong>
+        <span>拡張アイコンからスクリーンショットを撮影してください。</span>
+      </div>
+    </main>
+
+    <footer class="statusbar">
+      <span id="status" class="status-message" role="status" aria-live="polite">読み込み中…</span>
+      <span class="privacy-note"><svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>端末内だけで処理</span>
+      <div class="view-controls">
+        <span id="dimensions" class="dimensions"></span>
+        <label for="zoom">表示</label>
+        <select id="zoom">
+          <option value="fit">フィット</option>
+          <option value="0.25">25%</option>
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1">100%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+        </select>
+      </div>
+    </footer>
+  </div>
+
+  <dialog id="textDialog" class="text-dialog" aria-labelledby="textDialogTitle">
+    <form id="textForm">
+      <div class="dialog-heading">
+        <h2 id="textDialogTitle">テキストを追加</h2>
+        <p>キャンバスに置く文字を入力します。</p>
+      </div>
+      <label class="field" for="textValue"><span class="field-label">テキスト</span><input id="textValue" type="text" maxlength="200" autocomplete="off" required></label>
+      <div class="dialog-actions"><button id="cancelText" type="button">取消</button><button class="primary" type="submit">追加</button></div>
+    </form>
+  </dialog>
+
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

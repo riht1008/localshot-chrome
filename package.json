@@ -1,0 +1,12 @@
+{
+  "name": "localshot-chrome",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "完全ローカル駆動のChromeスクリーンショット・注釈拡張",
+  "scripts": {
+    "audit": "node scripts/audit-no-network.mjs",
+    "test": "node tests/geometry.mjs && node scripts/audit-no-network.mjs",
+    "check": "node --check src/service-worker.js && node --check src/page-functions.js && node --check src/popup.js && node --check src/editor.js && npm test"
+  }
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LocalShot</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="panel">
+    <header>
+      <div class="brand">LocalShot</div>
+      <div class="local-badge">LOCAL ONLY</div>
+    </header>
+    <p class="hint">画像・URL・操作ログを外部送信しません。</p>
+    <div class="actions">
+      <button data-mode="full-page"><span>▤</span><b>フルページ</b><small>ページ全体をスクロール撮影</small></button>
+      <button data-mode="visible"><span>▣</span><b>表示部分</b><small>今見えている範囲だけ撮影</small></button>
+      <button data-mode="region"><span>⌗</span><b>選択範囲</b><small>ブラウザ内をドラッグ選択</small></button>
+    </div>
+    <div id="error" class="error" hidden></div>
+    <footer>録画・共有・クラウド機能なし</footer>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

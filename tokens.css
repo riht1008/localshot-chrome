@@ -1,0 +1,77 @@
+:root {
+  --color-paper: oklch(98.5% 0.004 250);
+  --color-paper-2: oklch(96.5% 0.006 250);
+  --color-paper-3: oklch(93% 0.008 250);
+  --color-ink: oklch(20% 0.018 258);
+  --color-ink-2: oklch(34% 0.018 257);
+  --color-muted: oklch(47% 0.014 255);
+  --color-rule: oklch(86% 0.01 250);
+  --color-rule-strong: oklch(72% 0.016 252);
+  --color-accent: oklch(55% 0.2 256);
+  --color-accent-hover: oklch(49% 0.2 256);
+  --color-accent-soft: oklch(93% 0.04 256);
+  --color-accent-ink: oklch(98.5% 0.004 250);
+  --color-focus: oklch(45% 0.2 256);
+  --color-danger: oklch(50% 0.18 28);
+  --color-danger-hover: oklch(45% 0.18 28);
+  --color-danger-soft: oklch(95% 0.03 28);
+  --color-success: oklch(43% 0.12 155);
+  --color-success-soft: oklch(95% 0.025 155);
+  --color-stage: oklch(22% 0.012 258);
+  --color-stage-raised: oklch(27% 0.014 258);
+  --color-stage-text: oklch(82% 0.01 250);
+  --color-overlay: oklch(18% 0.015 258 / 0.62);
+
+  --palette-ink: oklch(21% 0.034 265);
+  --palette-white: oklch(100% 0 0);
+  --palette-gray: oklch(55% 0.04 257);
+  --palette-red: oklch(64% 0.22 26);
+  --palette-orange: oklch(70% 0.19 48);
+  --palette-yellow: oklch(84% 0.17 87);
+  --palette-green: oklch(72% 0.19 150);
+  --palette-teal: oklch(70% 0.14 181);
+  --palette-cyan: oklch(72% 0.13 215);
+  --palette-blue: oklch(55% 0.21 263);
+  --palette-purple: oklch(61% 0.22 293);
+  --palette-pink: oklch(66% 0.21 354);
+
+  --font-display: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", sans-serif;
+
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --rule-thin: 1px;
+  --radius-control: 6px;
+  --radius-panel: 10px;
+  --radius-round: 999px;
+
+  --shadow-canvas: 0 18px 48px oklch(8% 0.018 258 / 0.34);
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 200;
+  --z-modal: 400;
+  --z-tooltip: 600;
+}

@@ -108,7 +108,11 @@ async function localshotSavePptx() {
   let objectUrl = '';
   try {
     const pptxBackground = localshotExportPptxBackground();
-    const editableAnnotations = annotations.filter((object) => object.type !== 'blur' && object.type !== 'mosaic');
+    const editableAnnotations = annotations
+      .filter((object) => object.type !== 'blur' && object.type !== 'mosaic')
+      .map((object) => object.type === 'arrow' && object.arrowStyle === 'solid'
+        ? { ...object, arrowStyle: 'open' }
+        : object);
     const blob = await window.__localshotExportEditablePptx({
       backgroundDataUrl: pptxBackground,
       width: canvas.width,

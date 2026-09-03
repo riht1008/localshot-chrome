@@ -49,15 +49,7 @@ localFileInput.addEventListener('change', () => {
 async function importLocalFile(file) {
   errorBox.hidden = true;
   try {
-    if (file.name.toLowerCase().endsWith('.localshot')) {
-      const project = JSON.parse(await file.text());
-      const response = await sendMessage({ type: 'import-project', project });
-      if (!response?.ok) throw new Error(response?.error || '編集データを開けませんでした');
-      window.close();
-      return;
-    }
-
-    if (!file.type.startsWith('image/')) throw new Error('画像ファイルまたは .localshot を選択してください');
+    if (!file.type.startsWith('image/')) throw new Error('画像ファイルを選択してください');
     const bitmap = await createImageBitmap(file);
     try {
       const width = bitmap.width;

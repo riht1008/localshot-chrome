@@ -18,7 +18,6 @@
 - Undo / Redo
 - PNGローカル保存
 - 画像としてクリップボードへコピー
-- `.localshot` 編集データとして保存・再編集
 - 編集可能な `.pptx` 書き出し（PowerPoint / Google Slides向け）
 - キーボードショートカット
 
@@ -64,7 +63,7 @@ Manifest の CSP でも `connect-src 'none'` に固定しています。また `
 - 表示部分
 - 選択範囲
 - PC画面
-- 画像 / 編集データを開く
+- 画像を開く
 
 ### PC画面を撮影
 
@@ -74,18 +73,15 @@ Manifest の CSP でも `connect-src 'none'` に固定しています。また `
 
 Chrome / OS が表示する「画面を共有中」等の安全インジケーターはWebアプリや拡張機能から非表示にはできません。LocalShotでは共有時間を最小限にすることで、表示をできるだけ短くしています。
 
-### ローカル画像 / 編集データを開く
+### ローカル画像を開く
 
-「画像 / 編集データを開く」からPNG/JPEGなどの画像を読み込み、そのままLocalShot Editorで注釈できます。
-
-Editorの「編集データ」を押すと `.localshot` ファイルを保存します。これは完成画像ではなく、背景画像と矩形・矢印・テキスト等の注釈情報をまとめた再編集用ファイルです。あとからポップアップの「画像 / 編集データを開く」で `.localshot` を選ぶと編集を再開できます。
+「画像を開く」からPNG/JPEGなどの画像を読み込み、そのままLocalShot Editorで注釈できます。
 
 ### 書き出し
 
 Editorでは用途に応じて以下を使い分けます。
 
 - 「コピー」: 完成画像をPNGとしてクリップボードへコピー
-- 「編集データ」: あとからLocalShotで再編集する `.localshot`
 - 「PPTX」: PowerPoint / Google Slidesで編集する `.pptx`
 - 「PNG保存」: 完成画像をPNGとして保存
 
@@ -105,8 +101,8 @@ Chrome側で競合する場合は `chrome://extensions/shortcuts` から変更�
 
 - `activeTab`: ユーザーが起動した現在タブへの一時アクセス
 - `scripting`: 範囲選択・スクロール制御などをオンデマンド注入
-- `storage` + `unlimitedStorage`: 長いスクリーンショットや編集データを編集タブへ渡すためのローカル一時保存
-- `downloads`: PNG / `.localshot` / PPTX保存
+- `storage` + `unlimitedStorage`: 長いスクリーンショットを編集タブへ渡すためのローカル一時保存
+- `downloads`: PNG / PPTX保存
 - `clipboardWrite`: 画像コピー
 
 ホスト権限は宣言していません。PC画面撮影はWeb標準の画面共有UIを使うため、撮影するたびにユーザー自身が対象画面を選択します。

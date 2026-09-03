@@ -17,6 +17,9 @@
       <button data-mode="full-page"><span>▤</span><b>フルページ</b><small>ページ全体をスクロール撮影</small></button>
       <button data-mode="visible"><span>▣</span><b>表示部分</b><small>今見えている範囲だけ撮影</small></button>
       <button data-mode="region"><span>⌗</span><b>選択範囲</b><small>ブラウザ内をドラッグ選択</small></button>
+      <button id="desktopCapture" type="button"><span>▥</span><b>PC画面</b><small>ディスプレイ / ウィンドウを1枚撮影</small></button>
+      <label class="import-button" for="localFile"><span>＋</span><b>画像 / Projectを開く</b><small>ローカル画像や .localshot を編集</small></label>
+      <input id="localFile" class="visually-hidden" type="file" accept="image/*,.localshot,application/json">
     </div>
     <div id="error" class="error" hidden></div>
     <footer>録画・共有・クラウド機能なし</footer>

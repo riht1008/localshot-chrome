@@ -1,4 +1,4 @@
-import { exportEditablePptx } from './pptx-export.js';
+import { exportEditablePptx } from './pptx-export-safe.js';
 
 window.__localshotExportEditablePptx = exportEditablePptx;
 await loadClassicScript('editor-base.js');

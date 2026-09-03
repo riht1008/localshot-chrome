@@ -16,6 +16,7 @@ const runtimeFiles = [
   'src/editor-base.js',
   'src/editor-extensions.js',
   'src/pptx-export.js',
+  'src/pptx-export-safe.js',
 ];
 const banned = [
   /\bfetch\s*\(/,

@@ -7,6 +7,6 @@
   "scripts": {
     "audit": "node scripts/audit-no-network.mjs",
     "test": "node tests/geometry.mjs && node scripts/audit-no-network.mjs",
-    "check": "node --check src/service-worker.js && node --check src/page-functions.js && node --check src/popup.js && node --check src/editor.js && npm test"
+    "check": "node --check src/service-worker.js && node --check src/page-functions.js && node --check src/popup.js && node --check src/desktop-capture.js && node --check src/editor.js && node --check src/editor-base.js && node --check src/editor-extensions.js && node --check src/pptx-export.js && npm test"
   }
 }

@@ -24,7 +24,16 @@ for (const button of document.querySelectorAll('[data-mode]')) {
 desktopButton.addEventListener('click', async () => {
   errorBox.hidden = true;
   try {
-    await chrome.tabs.create({ url: chrome.runtime.getURL('src/desktop-capture.html') });
+    const originWindow = await chrome.windows.getCurrent();
+    const url = new URL(chrome.runtime.getURL('src/desktop-capture.html'));
+    if (Number.isInteger(originWindow?.id)) url.searchParams.set('originWindowId', String(originWindow.id));
+    await chrome.windows.create({
+      url: url.href,
+      type: 'popup',
+      width: 460,
+      height: 390,
+      focused: true,
+    });
     window.close();
   } catch (error) {
     showError(error);
@@ -43,7 +52,7 @@ async function importLocalFile(file) {
     if (file.name.toLowerCase().endsWith('.localshot')) {
       const project = JSON.parse(await file.text());
       const response = await sendMessage({ type: 'import-project', project });
-      if (!response?.ok) throw new Error(response?.error || 'Projectを開けませんでした');
+      if (!response?.ok) throw new Error(response?.error || '編集データを開けませんでした');
       window.close();
       return;
     }

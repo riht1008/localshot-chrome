@@ -43,16 +43,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true;
   }
 
-  if (message.type === 'import-project') {
-    handleImportedProject(message.project)
-      .then(() => sendResponse({ ok: true }))
-      .catch((error) => {
-        console.error('[LocalShot] import project failed', error);
-        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
-      });
-    return true;
-  }
-
   return false;
 });
 
@@ -112,37 +102,6 @@ async function handleImportedCapture(capture) {
     capturedAt: capture.capturedAt || Date.now(),
   };
   await chrome.storage.local.set({ lastCapture: normalized });
-  await chrome.storage.local.remove('pendingProject');
-  await chrome.tabs.create({ url: EDITOR_URL });
-  await flashBadge('✓', '#16a34a', 1000);
-}
-
-async function handleImportedProject(project) {
-  if (!project || project.version !== 1 || !project.backgroundDataUrl) {
-    throw new Error('LocalShotプロジェクトの形式が不正です');
-  }
-  if (!Number.isFinite(project.width) || !Number.isFinite(project.height)) {
-    throw new Error('LocalShotプロジェクトの画像サイズが不正です');
-  }
-  const capture = {
-    ...(project.capture || {}),
-    dataUrl: project.backgroundDataUrl,
-    width: Math.round(project.width),
-    height: Math.round(project.height),
-    mode: project.capture?.mode || 'project',
-    title: project.capture?.title || project.title || 'LocalShot Project',
-    url: project.capture?.url || '',
-    capturedAt: project.capture?.capturedAt || Date.now(),
-  };
-  const pendingProject = {
-    version: 1,
-    capture,
-    backgroundDataUrl: project.backgroundDataUrl,
-    width: capture.width,
-    height: capture.height,
-    annotations: Array.isArray(project.annotations) ? project.annotations : [],
-  };
-  await chrome.storage.local.set({ lastCapture: capture, pendingProject });
   await chrome.tabs.create({ url: EDITOR_URL });
   await flashBadge('✓', '#16a34a', 1000);
 }
@@ -236,7 +195,6 @@ async function deliverCapture(tab, mode, dataUrl, width, height) {
     capturedAt: Date.now(),
   };
   await chrome.storage.local.set({ lastCapture: capture });
-  await chrome.storage.local.remove('pendingProject');
   await chrome.tabs.create({ url: EDITOR_URL });
   await flashBadge('✓', '#16a34a', 1000);
 }

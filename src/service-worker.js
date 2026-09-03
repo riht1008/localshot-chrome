@@ -20,15 +20,30 @@ import {
 const EDITOR_URL = chrome.runtime.getURL('src/editor.html');
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (!message || message.type !== 'capture') return false;
-  handleCapture(message.mode)
-    .then(() => sendResponse({ ok: true }))
-    .catch((error) => {
-      console.error('[LocalShot] capture failed', error);
-      void flashBadge('!', '#dc2626', 3000);
-      sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
-    });
-  return true;
+  if (!message) return false;
+
+  if (message.type === 'capture') {
+    handleCapture(message.mode)
+      .then(() => sendResponse({ ok: true }))
+      .catch((error) => {
+        console.error('[LocalShot] capture failed', error);
+        void flashBadge('!', '#dc2626', 3000);
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
+      });
+    return true;
+  }
+
+  if (message.type === 'import-capture') {
+    handleImportedCapture(message.capture)
+      .then(() => sendResponse({ ok: true }))
+      .catch((error) => {
+        console.error('[LocalShot] import capture failed', error);
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) });
+      });
+    return true;
+  }
+
+  return false;
 });
 
 chrome.commands.onCommand.addListener((command) => {
@@ -71,6 +86,24 @@ async function handleCapture(mode) {
   if (mode === 'region') return captureRegion(tab);
   if (mode === 'full-page') return captureFullPage(tab);
   throw new Error(`不明な撮影モードです: ${mode}`);
+}
+
+async function handleImportedCapture(capture) {
+  if (!capture?.dataUrl || !capture.width || !capture.height) {
+    throw new Error('読み込む画像データが不正です');
+  }
+  const normalized = {
+    dataUrl: capture.dataUrl,
+    width: Math.round(capture.width),
+    height: Math.round(capture.height),
+    mode: capture.mode || 'local-image',
+    title: capture.title || 'ローカル画像',
+    url: capture.url || '',
+    capturedAt: capture.capturedAt || Date.now(),
+  };
+  await chrome.storage.local.set({ lastCapture: normalized });
+  await chrome.tabs.create({ url: EDITOR_URL });
+  await flashBadge('✓', '#16a34a', 1000);
 }
 
 async function captureVisible(tab) {

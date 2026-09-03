@@ -9,8 +9,14 @@ const runtimeFiles = [
   'src/page-functions.js',
   'src/popup.html',
   'src/popup.js',
+  'src/desktop-capture.html',
+  'src/desktop-capture.js',
   'src/editor.html',
   'src/editor.js',
+  'src/editor-base.js',
+  'src/editor-extensions.js',
+  'src/pptx-export.js',
+  'src/pptx-export-safe.js',
 ];
 const banned = [
   /\bfetch\s*\(/,
@@ -21,11 +27,17 @@ const banned = [
   /https?:\/\//i,
   /wss?:\/\//i,
 ];
+const xmlNamespaceUrls = [
+  /http:\/\/schemas\.openxmlformats\.org\/[A-Za-z0-9_./-]*/g,
+  /http:\/\/purl\.org\/dc\/[A-Za-z0-9_./-]*/g,
+  /http:\/\/www\.w3\.org\/2001\/XMLSchema-instance/g,
+];
 
 const violations = [];
 for (const relative of runtimeFiles) {
   const file = path.join(root, relative);
-  const text = fs.readFileSync(file, 'utf8');
+  let text = fs.readFileSync(file, 'utf8');
+  for (const allowed of xmlNamespaceUrls) text = text.replace(allowed, '');
   for (const pattern of banned) {
     if (pattern.test(text)) violations.push(`${relative}: ${pattern}`);
   }

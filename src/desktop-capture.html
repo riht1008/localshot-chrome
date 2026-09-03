@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PC画面を撮影 — LocalShot</title>
+  <link rel="stylesheet" href="desktop-capture.css">
+</head>
+<body>
+  <main class="capture-card">
+    <div class="brand">LocalShot <span>DESKTOP CAPTURE</span></div>
+    <h1>PC画面を撮影</h1>
+    <p>「画面を選択して撮影」を押して、ディスプレイまたはウィンドウを選んでください。選択後はLocalShotのウィンドウを一時的に隠し、すぐに1枚だけ撮影します。</p>
+    <p class="privacy">映像は録画・送信しません。取得後すぐに画面共有を停止し、1フレームだけLocalShot Editorへ渡します。</p>
+    <button id="startCapture" type="button">画面を選択して撮影</button>
+    <div id="status" class="status" role="status">待機中</div>
+    <div id="error" class="error" hidden></div>
+  </main>
+  <script type="module" src="desktop-capture.js"></script>
+</body>
+</html>

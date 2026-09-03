@@ -1,4 +1,4 @@
-const localshotProjectButton = localshotCreateActionButton('saveProject', 'Project', 'LocalShot Projectを保存');
+const localshotProjectButton = localshotCreateActionButton('saveProject', '編集データ', 'あとでLocalShotで編集できる .localshot を保存');
 const localshotPptxButton = localshotCreateActionButton('savePptx', 'PPTX', '編集可能なPowerPointを保存');
 saveButton.before(localshotProjectButton, localshotPptxButton);
 
@@ -35,7 +35,7 @@ function localshotCreateActionButton(id, label, ariaLabel) {
 
 async function localshotRestoreProject(project) {
   if (!project?.backgroundDataUrl || !Number.isFinite(project.width) || !Number.isFinite(project.height)) {
-    throw new Error('LocalShot Projectの形式が不正です');
+    throw new Error('LocalShot編集データの形式が不正です');
   }
 
   backgroundDataUrl = project.backgroundDataUrl;
@@ -49,7 +49,7 @@ async function localshotRestoreProject(project) {
     width: canvas.width,
     height: canvas.height,
     mode: project.capture?.mode || 'project',
-    title: project.capture?.title || project.title || 'LocalShot Project',
+    title: project.capture?.title || project.title || 'LocalShot編集データ',
   };
 
   undoStack = [];
@@ -66,7 +66,7 @@ async function localshotRestoreProject(project) {
   applyZoom();
   render();
   syncEditorUi();
-  statusEl.textContent = `Project / ${capture.title}`;
+  statusEl.textContent = `編集データ / ${capture.title}`;
 }
 
 async function localshotSaveProject() {
@@ -77,7 +77,8 @@ async function localshotSaveProject() {
     delete captureMeta.dataUrl;
     const project = {
       version: 1,
-      title: capture?.title || 'LocalShot Project',
+      kind: 'localshot-editable',
+      title: capture?.title || 'LocalShot編集データ',
       capture: captureMeta,
       backgroundDataUrl,
       width: canvas.width,
@@ -92,11 +93,11 @@ async function localshotSaveProject() {
       filename: localshotBuildFilename('localshot'),
       saveAs: false,
     });
-    statusEl.textContent = 'LocalShot Projectを保存しました';
-    setActionButtonState(localshotProjectButton, 'success', '保存済み', 2200);
+    statusEl.textContent = '編集データ (.localshot) を保存しました。「画像 / 編集データを開く」から再編集できます';
+    setActionButtonState(localshotProjectButton, 'success', '保存済み', 2600);
   } catch (error) {
     console.error(error);
-    statusEl.textContent = 'Projectを保存できませんでした';
+    statusEl.textContent = '編集データを保存できませんでした';
     setActionButtonState(localshotProjectButton, 'error', '保存失敗', 2800);
   } finally {
     if (objectUrl) window.setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
@@ -172,7 +173,7 @@ function localshotModeLabel(value) {
     'full-page': 'フルページ',
     desktop: 'PC画面',
     'local-image': 'ローカル画像',
-    project: 'Project',
+    project: '編集データ',
   })[value] || value || '画像';
 }
 

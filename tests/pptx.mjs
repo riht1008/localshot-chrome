@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { exportEditablePptx } from '../src/pptx-export.js';
+import { exportEditablePptx } from '../src/pptx-export-safe.js';
 
 const backgroundDataUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZxN8AAAAASUVORK5CYII=';
 const blob = await exportEditablePptx({
@@ -25,5 +25,7 @@ assert.match(raw, /ppt\/media\/image1\.png/);
 assert.match(raw, /name="rect 3"/);
 assert.match(raw, /name="Arrow 4"/);
 assert.match(raw, /name="Text 5"/);
+assert.match(raw, /<p:sldLayoutId id="2147483649" r:id="rId1"\/>/);
+assert.doesNotMatch(raw, /<p:sldLayoutId id="1"/);
 
 console.log('pptx export: ok');

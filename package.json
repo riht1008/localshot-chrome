@@ -1,9 +1,17 @@
 {
   "name": "localshot-chrome",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "完全ローカル駆動のChromeスクリーンショット・注釈拡張",
+  "description": "完全ローカルで動作するChromeスクリーンショット・注釈拡張",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riht1008/localshot-chrome.git"
+  },
+  "bugs": {
+    "url": "https://github.com/riht1008/localshot-chrome/issues"
+  },
+  "homepage": "https://github.com/riht1008/localshot-chrome#readme",
   "scripts": {
     "audit": "node scripts/audit-no-network.mjs",
     "test": "node tests/geometry.mjs && node scripts/audit-no-network.mjs",
